@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TodoList } from '../Todo';
 import './WelcomePage.css';
 import { Navbar } from '../Navbar';
+import { TaskList } from '../Task';
 
 interface WelcomePageProps {
   onLogout: () => void;
@@ -25,16 +25,21 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onLogout }) => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/login');  // Preusmjeri na login stranicu ako korisnik nije prijavljen
+      navigate('/login'); // Preusmjeri na login stranicu ako korisnik nije prijavljen
     }
   }, [loading, user, navigate]);
 
-  if (loading) return <p>Loading...</p>;  // Dok se stanje učitava
+  const handleLogout = () => {
+    onLogout();
+    navigate('/'); // Navigiraj na početnu stranicu
+  };
+
+  if (loading) return <p>Loading...</p>; // Dok se stanje učitava
 
   return (
     <div className="welcome-container">
-      <Navbar onLogout={onLogout} />
-      <TodoList /> {/* Prikazuje listu zadataka */}
+      <Navbar onLogout={handleLogout} /> {/* Proslijedi ažuriranu funkciju odjave */}
+      {user && <TaskList user={user} />} {/* Prikazuje listu zadataka i prosljeđuje korisnika */}
     </div>
   );
 };

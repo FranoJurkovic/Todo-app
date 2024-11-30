@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import WelcomePage from './Components/WelcomePage/WelcomePage';
 import Registration from './Components/Registration/Registration';
 import Login from './Components/Login/Login';
 import HomePage from './Components/HomePage/HomePage';
+import { useAuth } from './Hooks/useAuth';
+import { TaskList } from './Components/Task';
 
 export const App: React.FC = () => {
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
-
-  useEffect(() => {
-    const user = localStorage.getItem('loggedInUser');
-    if (user) {
-      setLoggedInUser(user);
-    }
-  }, []);
+  const { user, login, logout } = useAuth(); // Koristimo useAuth kuku
 
   const handleLogin = (username: string) => {
-    localStorage.setItem('loggedInUser', username);
-    setLoggedInUser(username);
+    login(username, 'password');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('loggedInUser');
-    setLoggedInUser(null);
+    logout();
   };
 
   return (
@@ -32,6 +25,7 @@ export const App: React.FC = () => {
         <Route path="/register" element={<Registration />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/welcome" element={<WelcomePage onLogout={handleLogout} />} />
+        {user && <Route path="/tasks" element={<TaskList user={user} />} />}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

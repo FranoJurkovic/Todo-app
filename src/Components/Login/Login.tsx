@@ -20,7 +20,7 @@ const Login: FC<LoginProps> = ({ onLogin }) => {
     try {
       await login(email, password);
       onLogin(email); // Pohrani korisničke podatke u App komponenti
-      navigate("/welcome");
+      navigate("/welcome"); // Preusmjeri na welcome stranicu
     } catch {
       setErrorMessage(error || "Pogrešan email ili lozinka!");
     }

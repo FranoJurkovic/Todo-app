@@ -35,6 +35,7 @@ export const useAuth = () => {
         const user = JSON.parse(savedUser);
         if (user.email === email && user.password === password) {
           setUser(email);
+          localStorage.setItem('loggedInUser', email); // Sprema prijavljenog korisnika
           setError(null);
         } else {
           throw new Error('Invalid credentials');
@@ -50,7 +51,7 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('loggedInUser');
     setUser(null);
   };
 
